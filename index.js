@@ -31,6 +31,47 @@ async function run() {
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
+    // Define collections
+    const usersCollection = client.db("Zephyra").collection("users");
+
+    // Function to generate a unique 6-digit number for itemNumber
+    const generateUniqueitemNo = async () => {
+    let isUnique = false;
+    let itemNo;
+    while (!isUnique) {
+        // Generate a 6-digit number
+        itemNo = Math.floor(100000 + Math.random() * 900000);
+        
+        // Check if the generated itemNo already exists in the collection
+        const existingItemNo = await reportDataCollection.findOne({ itemNo });
+        if (!existingItemNo) {
+        isUnique = true;
+        }
+    }
+    return itemNo;
+    };
+
+    // POST /users endpoint to create a new user
+    app.post('/users', async (req, res) => {
+      const userData = req.body;
+      const userEmail = userData?.email;
+  
+      try {
+      // Check if a user with the given email already exists
+      const checkUserExist = await usersCollection.findOne({ email: userEmail });
+      if (checkUserExist) {
+         return res.status(400).json({ message: 'User with this email already exists.' });
+      }
+  
+      // Create a new user if email is not found
+      const result = await usersCollection.insertOne(userData);
+      res.status(201).send(result);
+      } catch (error) {
+         console.error('Error creating user:', error);
+         res.status(500).json({ message: 'Internal server error' });
+      }
+    });
+
     
 
   } finally {
