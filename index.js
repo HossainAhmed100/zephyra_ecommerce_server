@@ -33,6 +33,7 @@ async function run() {
 
     // Define collections
     const usersCollection = client.db("Zephyra").collection("users");
+    const productsCollection = client.db("Zephyra").collection("products");
 
     // Function to generate a unique 6-digit number for itemNumber
     const generateUniqueitemNo = async () => {
@@ -71,6 +72,25 @@ async function run() {
          res.status(500).json({ message: 'Internal server error' });
       }
     });
+
+    //GET /products endpoint to get all product data
+    app.get("/products", async(req, res) => {
+      const result = await productsCollection.find().toArray();
+      res.send(result)
+    })
+
+    //PATCH /products endpoint to update product data
+    app.patch("/products/:id", async(req, res) => {
+      const id = req.params.id;
+      console.log("🚀 ~ app.patch ~ id:", id)
+      const query = {category: id};
+      const updateDoc = {$set:{
+        thumbnail: "https://i.ibb.co/3s7hJKD/laptop.png"
+      }}
+      const result = await productsCollection.updateMany(query, updateDoc);
+      console.log("🚀 ~ app.patch ~ result:", result)
+      res.send(result)
+    })
 
     
 
