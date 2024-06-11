@@ -11,7 +11,7 @@ app.get("/", (req, res) => {
     res.send("Smart Fashion Server is Running");
 });
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.q3g5zjn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -74,9 +74,31 @@ async function run() {
     });
 
     //GET /products endpoint to get all product data
-    app.get("/products", async(req, res) => {
-      const result = await productsCollection.find().toArray();
+    app.get("/products/:quantity", async(req, res) => {
+      const quantity = parseInt(req.params.quantity);
+      if(quantity > 0){
+        const result = await productsCollection.find().limit(quantity).toArray();
+        res.send(result)
+      }else{
+        const result = await productsCollection.find().toArray();
+        res.send(result)
+      }
+    })
+
+    //GET /products endpoint to get product data with _id
+    app.get("/productsById/:id", async(req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      const result = await productsCollection.findOne(query);
       res.send(result)
+    })
+
+    // Endpoint to delete a specific product item by _id
+    app.delete("/products/:itemId", async (req, res) => {
+      const itemId = req.params.itemId;
+      const query = {_id: new ObjectId(itemId)};
+      const result = await productsCollection.deleteOne(query);
+      res.send(result);
     })
 
     //PATCH /products endpoint to update product data
