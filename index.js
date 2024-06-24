@@ -127,5 +127,5 @@ run().catch(console.dir);
 
 
 app.listen(port, () => {
-    console.log("Smart Fashion Server Setting on", port)
+    console.log("Zephyra Server Setting on", port)
 })

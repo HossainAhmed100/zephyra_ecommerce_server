@@ -1,0 +1,8 @@
+Here is Information abou page
+Basic Information: Product Name, Product Description, Product Category, SKU (Stock Keeping Unit), Brand
+Media: Product Thumbnail, Additional Images, Product Video URL
+Pricing and Stock: Price, Discount Price, Quantity in Stock
+Product Variants: Options for different versions of the product (e.g., sizes, colors).
+Shipping: Weight, Dimensions, Shipping Class
+Additional Information: Tags, Meta Title, Meta Description, Product Attributes, Warranty Information
+Customization: Select Related Products, Add Return Return Policy, Custom Fields, FAQ.
