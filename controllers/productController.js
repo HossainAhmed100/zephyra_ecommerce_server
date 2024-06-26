@@ -1,25 +1,28 @@
-const Product = require('../models/Product');
+// Import Product model
+const products = require('../models/Product');
 
+// Get all products with optional quantity limit
 exports.getAllProducts = async (req, res) => {
     const quantity = parseInt(req.params.quantity);
     try {
-        let products;
+        let productsList;
         if (quantity > 0) {
-            products = await Product.find().limit(quantity);
+            productsList = await products.find().limit(quantity);
         } else {
-            products = await Product.find();
+            productsList = await products.find();
         }
-        res.json(products);
+        res.json(productsList);
     } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching productsList:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
 
+// Get product by ID
 exports.getProductById = async (req, res) => {
     const id = req.params.id;
     try {
-        const product = await Product.findById(id);
+        const product = await products.findById(id);
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
@@ -30,10 +33,11 @@ exports.getProductById = async (req, res) => {
     }
 };
 
+// Delete product by ID
 exports.deleteProduct = async (req, res) => {
     const id = req.params.itemId;
     try {
-        const result = await Product.findByIdAndDelete(id);
+        const result = await products.findByIdAndDelete(id);
         if (!result) {
             return res.status(404).json({ message: 'Product not found' });
         }
@@ -44,10 +48,11 @@ exports.deleteProduct = async (req, res) => {
     }
 };
 
+// Update product by category
 exports.updateProduct = async (req, res) => {
     const id = req.params.id;
     try {
-        const updatedProduct = await Product.updateMany(
+        const updatedProduct = await products.updateMany(
             { category: id },
             { $set: { thumbnail: "https://i.ibb.co/3s7hJKD/laptop.png" } }
         );

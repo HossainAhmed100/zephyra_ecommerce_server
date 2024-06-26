@@ -1,22 +1,53 @@
+// Import Mongoose module
 const mongoose = require('mongoose');
 
+// Define the product schema
 const productSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
+    rating: { 
+      type: Number, 
+      required: true,
+      min: 0,
+      max: 100
     },
-    category: {
-        type: String,
-        required: true,
+    price: { 
+      type: Number, 
+      required: true 
     },
-    price: {
-        type: Number,
-        required: true,
+    discount: { 
+      type: Number, 
+      required: true 
     },
-    thumbnail: {
+    instock: { 
+      type: Boolean, 
+      required: true 
+    },
+    brand: { 
+      type: String, 
+      required: true 
+    },
+    category: { 
+      type: String, 
+      required: true 
+    },
+    model: { 
+      type: String, 
+      required: true 
+    },
+    thumbnail: { 
+      type: String, 
+      required: true 
+    },
+    morePhoto: [
+      { 
         type: String,
-        required: true,
+        required: true
+      }
+    ],
+    description: { 
+      type: String, 
+      required: true 
     }
-});
+  });
 
-module.exports = mongoose.model('Product', productSchema);
+// Export Product model
+module.exports = mongoose.model('products', productSchema);
